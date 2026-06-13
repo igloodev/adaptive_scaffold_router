@@ -42,7 +42,7 @@ typedef NavigationRailDestinationBuilder = NavigationRailDestination Function(
 /// [Material Design 3](https://m3.material.io/foundations/adaptive-design/overview)
 /// that adapts to a variety of screens.
 ///
-/// !["Example of a display made with AdaptiveScaffold"](../../example/demo_files/adaptiveScaffold.gif)
+/// ![Adaptive navigation morphing across phone, tablet and desktop](https://raw.githubusercontent.com/igloodev/adaptive_scaffold_router/master/screenshots/demo.gif)
 ///
 /// [AdaptiveScaffold] provides a preset of layout, including positions and
 /// animations, by handling macro changes in navigational elements and bodies
