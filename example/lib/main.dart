@@ -41,9 +41,50 @@ final GoRouter _router = GoRouter(
       ) {
         return AdaptiveNavigationShell(
           navigationShell: navigationShell,
+          // A header (title) and footer, shown on the rail at tablet/desktop.
+          leadingExtendedNavRail: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text('MAIL',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w700, letterSpacing: 1.5)),
+            ),
+          ),
+          trailingNavRail: const Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Icon(Icons.logout),
+          ),
+          // Platform-adaptive bottom bar: CupertinoTabBar on Apple platforms,
+          // the Material NavigationBar everywhere else.
+          bottomNavigationBuilder: (
+            BuildContext context,
+            List<NavigationDestination> destinations,
+            int index,
+            ValueChanged<int> onSelected,
+          ) {
+            final TargetPlatform platform = Theme.of(context).platform;
+            final bool apple = platform == TargetPlatform.iOS ||
+                platform == TargetPlatform.macOS;
+            return apple
+                ? AdaptiveScaffold.cupertinoTabBar(
+                    destinations: destinations,
+                    currentIndex: index,
+                    onTap: onSelected,
+                  )
+                : AdaptiveScaffold.standardBottomNavigationBar(
+                    destinations: destinations,
+                    currentIndex: index,
+                    onDestinationSelected: onSelected,
+                  );
+          },
           destinations: const <NavigationDestination>[
+            // A Badge composes directly into a destination's icon.
             NavigationDestination(
-                icon: Icon(Icons.inbox_outlined), label: 'Inbox'),
+              icon: Badge(label: Text('3'), child: Icon(Icons.inbox_outlined)),
+              selectedIcon: Badge(label: Text('3'), child: Icon(Icons.inbox)),
+              label: 'Inbox',
+            ),
             NavigationDestination(
                 icon: Icon(Icons.article_outlined), label: 'Articles'),
             NavigationDestination(

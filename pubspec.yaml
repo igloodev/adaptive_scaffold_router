@@ -1,6 +1,6 @@
 name: adaptive_scaffold_router
 description: "Adaptive navigation scaffold for Material 3 — drop-in successor to flutter_adaptive_scaffold with first-class go_router support and state preservation."
-version: 0.1.0
+version: 0.2.0
 homepage: https://github.com/igloodev/adaptive_scaffold_router
 repository: https://github.com/igloodev/adaptive_scaffold_router
 issue_tracker: https://github.com/igloodev/adaptive_scaffold_router/issues

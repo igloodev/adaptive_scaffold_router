@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/cupertino.dart' show CupertinoTabBar;
 import 'package:flutter/material.dart';
 
 import 'adaptive_layout.dart';
@@ -36,6 +37,16 @@ const double kNavigationRailDefaultPadding = 8;
 typedef NavigationRailDestinationBuilder = NavigationRailDestination Function(
   int index,
   NavigationDestination destination,
+);
+
+/// Signature for [AdaptiveScaffold.bottomNavigationBuilder], used to supply a
+/// custom bottom navigation widget (for example a [CupertinoTabBar]) in place
+/// of the default Material [NavigationBar] at the small breakpoint.
+typedef AdaptiveBottomNavigationBuilder = Widget Function(
+  BuildContext context,
+  List<NavigationDestination> destinations,
+  int selectedIndex,
+  ValueChanged<int> onDestinationSelected,
 );
 
 /// Implements the basic visual layout structure for
@@ -126,6 +137,7 @@ class AdaptiveScaffold extends StatefulWidget {
     this.extendedNavigationRailWidth = 192,
     this.appBarBreakpoint,
     this.navigationRailDestinationBuilder,
+    this.bottomNavigationBuilder,
     this.groupAlignment,
   }) : assert(
           destinations.length >= 2,
@@ -321,6 +333,26 @@ class AdaptiveScaffold extends StatefulWidget {
   /// Used to map NavigationDestination to NavigationRailDestination.
   final NavigationRailDestinationBuilder? navigationRailDestinationBuilder;
 
+  /// Optional builder for the bottom navigation shown at the small breakpoint.
+  ///
+  /// When non-null this replaces the default Material [NavigationBar], letting
+  /// you supply a platform-specific bar such as a [CupertinoTabBar]. Use
+  /// [AdaptiveScaffold.cupertinoTabBar] for a ready-made Cupertino bar:
+  ///
+  /// ```dart
+  /// AdaptiveScaffold(
+  ///   destinations: destinations,
+  ///   bottomNavigationBuilder: (context, destinations, index, onSelected) =>
+  ///       AdaptiveScaffold.cupertinoTabBar(
+  ///     destinations: destinations,
+  ///     currentIndex: index,
+  ///     onTap: onSelected,
+  ///   ),
+  ///   body: (_) => body,
+  /// )
+  /// ```
+  final AdaptiveBottomNavigationBuilder? bottomNavigationBuilder;
+
   /// Callback function for when the index of a [NavigationRail] changes.
   static WidgetBuilder emptyBuilder = (_) => const SizedBox();
 
@@ -436,6 +468,35 @@ class AdaptiveScaffold extends StatefulWidget {
           ),
         );
       },
+    );
+  }
+
+  /// Builds a [CupertinoTabBar] from a list of [NavigationDestination]s, for
+  /// use as a [bottomNavigationBuilder] on Apple platforms.
+  ///
+  /// Each destination's [NavigationDestination.icon] /
+  /// [NavigationDestination.selectedIcon] and label are mapped to a
+  /// [BottomNavigationBarItem].
+  static Widget cupertinoTabBar({
+    required List<NavigationDestination> destinations,
+    int currentIndex = 0,
+    ValueChanged<int>? onTap,
+  }) {
+    assert(
+      destinations.length >= 2,
+      'cupertinoTabBar requires at least two destinations.',
+    );
+    return CupertinoTabBar(
+      currentIndex: currentIndex,
+      onTap: onTap,
+      items: <BottomNavigationBarItem>[
+        for (final NavigationDestination destination in destinations)
+          BottomNavigationBarItem(
+            icon: destination.icon,
+            activeIcon: destination.selectedIcon ?? destination.icon,
+            label: destination.label,
+          ),
+      ],
     );
   }
 
@@ -694,22 +755,28 @@ class _AdaptiveScaffoldState extends State<AdaptiveScaffold> {
             ),
           },
         ),
-        bottomNavigation:
-            !widget.drawerBreakpoint.isActive(context) || !widget.useDrawer
-                ? SlotLayout(
-                    config: <Breakpoint, SlotLayoutConfig>{
-                      widget.smallBreakpoint: SlotLayout.from(
-                        key: const Key('bottomNavigation'),
-                        builder: (_) =>
-                            AdaptiveScaffold.standardBottomNavigationBar(
+        bottomNavigation: !widget.drawerBreakpoint.isActive(context) ||
+                !widget.useDrawer
+            ? SlotLayout(
+                config: <Breakpoint, SlotLayoutConfig>{
+                  widget.smallBreakpoint: SlotLayout.from(
+                    key: const Key('bottomNavigation'),
+                    builder: (BuildContext context) =>
+                        widget.bottomNavigationBuilder?.call(
+                          context,
+                          widget.destinations,
+                          widget.selectedIndex ?? 0,
+                          widget.onSelectedIndexChange ?? (_) {},
+                        ) ??
+                        AdaptiveScaffold.standardBottomNavigationBar(
                           currentIndex: widget.selectedIndex,
                           destinations: widget.destinations,
                           onDestinationSelected: widget.onSelectedIndexChange,
                         ),
-                      ),
-                    },
-                  )
-                : null,
+                  ),
+                },
+              )
+            : null,
         body: SlotLayout(
           config: <Breakpoint, SlotLayoutConfig?>{
             Breakpoints.standard: SlotLayout.from(

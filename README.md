@@ -10,6 +10,13 @@ A drop-in successor to Google's discontinued
 picking up where it left off.
 
 <p align="center">
+  <a href="https://pub.dev/packages/adaptive_scaffold_router"><img src="https://img.shields.io/pub/v/adaptive_scaffold_router?logo=dart&color=0175C2" alt="pub version"></a>
+  <a href="https://pub.dev/packages/adaptive_scaffold_router/score"><img src="https://img.shields.io/pub/points/adaptive_scaffold_router?color=2EA44F" alt="pub points"></a>
+  <a href="https://flutter.dev"><img src="https://img.shields.io/badge/Flutter-3.22%2B-02569B?logo=flutter&logoColor=white" alt="Flutter"></a>
+  <a href="https://github.com/igloodev/adaptive_scaffold_router/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-BSD--3--Clause-blue" alt="license"></a>
+</p>
+
+<p align="center">
   <img src="https://raw.githubusercontent.com/igloodev/adaptive_scaffold_router/master/screenshots/demo.gif" alt="Resizing the window morphs the navigation while the body state is preserved" width="640">
 </p>
 
@@ -22,17 +29,21 @@ in April 2025 to focus on core framework work — not because it was unpopular
 (it still gets thousands of downloads a week). It invited the community to make
 **one sustainable fork** rather than many one-off forks.
 
-The forks that appeared mostly added cosmetic options. They left the two pain
-points developers actually hit untouched:
+The community forks that appeared mostly added cosmetic options — none solved
+the two things developers actually hit: **`go_router` integration** and **state
+loss on resize**. This package does.
 
-| Pain with the original | `adaptive_scaffold_router` |
-| --- | --- |
-| No documented way to use it with **`go_router`** ([flutter#129850](https://github.com/flutter/flutter/issues/129850)) | `AdaptiveNavigationShell` — drop-in `StatefulShellRoute` integration |
-| **State is lost** when the breakpoint changes (phone ↔ tablet rebuilds the body) | Body is kept mounted; only the navigation chrome changes |
-| Material-only | Material 3 today; Cupertino on the roadmap |
+| | `flutter_adaptive_scaffold`<br>(discontinued) | Community forks | **`adaptive_scaffold_router`** |
+| --- | :---: | :---: | :---: |
+| Actively maintained | ❌ | ⚠️ | ✅ |
+| Drop-in `AdaptiveScaffold` API | ✅ | ⚠️ renamed | ✅ |
+| **`go_router` integration** ([flutter#129850](https://github.com/flutter/flutter/issues/129850)) | ❌ | ❌ | ✅ |
+| **State preserved across breakpoints** | ❌ | ❌ | ✅ |
+| Cupertino bottom bar | ❌ | ❌ | ✅ |
+| Material 3 | ✅ | ✅ | ✅ |
 
-Everything else stays **API-compatible**, so migrating is a one-line import
-change.
+Everything stays **API-compatible** with the original, so migrating is a
+one-line import change.
 
 ## Features
 
@@ -130,6 +141,53 @@ AdaptiveScaffold(
 )
 ```
 
+## Customizing the navigation
+
+**Badges** — compose a Material `Badge` into any destination's icon; it shows in
+both the bottom bar and the rail:
+
+```dart
+NavigationDestination(
+  icon: Badge(label: Text('3'), child: Icon(Icons.inbox)),
+  label: 'Inbox',
+)
+```
+
+**Rail header / footer** — `leadingExtendedNavRail` (or `leadingUnextendedNavRail`)
+adds a header above the destinations; `trailingNavRail` adds a footer below them
+(shown on the rail at tablet/desktop widths):
+
+```dart
+AdaptiveNavigationShell(
+  navigationShell: navigationShell,
+  leadingExtendedNavRail: const Text('MAIL'),
+  trailingNavRail: const Icon(Icons.logout),
+  destinations: destinations,
+)
+```
+
+**Cupertino / platform-adaptive bottom bar** — supply a `bottomNavigationBuilder`
+to swap the small-breakpoint bar (e.g. a `CupertinoTabBar` on Apple platforms),
+or set `cupertino: true` to always use one:
+
+```dart
+AdaptiveNavigationShell(
+  navigationShell: navigationShell,
+  destinations: destinations,
+  bottomNavigationBuilder: (context, destinations, index, onSelected) {
+    final TargetPlatform platform = Theme.of(context).platform;
+    final bool apple = platform == TargetPlatform.iOS ||
+        platform == TargetPlatform.macOS;
+    return apple
+        ? AdaptiveScaffold.cupertinoTabBar(
+            destinations: destinations, currentIndex: index, onTap: onSelected)
+        : AdaptiveScaffold.standardBottomNavigationBar(
+            destinations: destinations, currentIndex: index,
+            onDestinationSelected: onSelected);
+  },
+)
+```
+
 ## Migrating from `flutter_adaptive_scaffold`
 
 Change the dependency and the import:
@@ -187,10 +245,41 @@ AdaptiveNavigationShell(
 
 ## Roadmap
 
-- Cupertino / platform-adaptive navigation.
+- Cupertino-styled rail/sidebar for Apple desktop (the bottom bar is already
+  Cupertino-capable via `bottomNavigationBuilder` / `cupertino`).
 - Richer per-destination customization (label visibility, icon transitions).
 
-## Credits
+## 🤝 Contributing
 
-Derived from `flutter_adaptive_scaffold` by The Flutter Authors, used under its
-BSD 3-Clause license. See [LICENSE](LICENSE).
+Contributions are welcome! Please feel free to open an
+[issue](https://github.com/igloodev/adaptive_scaffold_router/issues) or submit a
+Pull Request.
+
+## 📄 License
+
+This project is licensed under the **BSD 3-Clause License** — see the
+[LICENSE](LICENSE) file for details. It is derived from `flutter_adaptive_scaffold`
+by The Flutter Authors, used under the same license.
+
+## 👨‍💻 Author
+
+Created with ❤️ by [Akhilesh](https://github.com/Akhilesh002) ·
+[igloodev](https://igloodev.in)
+
+## 🙏 Acknowledgments
+
+- Built on Google's [`flutter_adaptive_scaffold`](https://pub.dev/packages/flutter_adaptive_scaffold), continued after its discontinuation.
+- [Material 3 adaptive design](https://m3.material.io/foundations/adaptive-design/overview) guidelines.
+- [`go_router`](https://pub.dev/packages/go_router) for stateful nested navigation.
+
+## 📚 Additional Resources
+
+- [Material 3 — Adaptive design](https://m3.material.io/foundations/adaptive-design/overview)
+- [`go_router` documentation](https://pub.dev/packages/go_router)
+- [flutter_adaptive_scaffold discontinuation (flutter#162965)](https://github.com/flutter/flutter/issues/162965)
+
+---
+
+If you find this package useful, please give it a ⭐ on
+[GitHub](https://github.com/igloodev/adaptive_scaffold_router) and a 👍 on
+[pub.dev](https://pub.dev/packages/adaptive_scaffold_router)!

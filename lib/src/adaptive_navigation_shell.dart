@@ -101,6 +101,8 @@ class AdaptiveNavigationShell extends StatelessWidget {
     this.navigationRailDestinationBuilder,
     this.groupAlignment,
     this.onDestinationSelected,
+    this.bottomNavigationBuilder,
+    this.cupertino = false,
   }) : assert(
           destinations.length >= 2,
           'At least two destinations are required',
@@ -187,6 +189,38 @@ class AdaptiveNavigationShell extends StatelessWidget {
   /// the branch switch. Useful for analytics or closing transient UI.
   final ValueChanged<int>? onDestinationSelected;
 
+  /// Optional custom bottom navigation builder for the small breakpoint.
+  ///
+  /// Takes precedence over [cupertino]. See
+  /// [AdaptiveScaffold.bottomNavigationBuilder].
+  final AdaptiveBottomNavigationBuilder? bottomNavigationBuilder;
+
+  /// When true, the small-breakpoint bottom navigation renders as a
+  /// [CupertinoTabBar] instead of a Material [NavigationBar].
+  ///
+  /// Ignored if [bottomNavigationBuilder] is provided. For platform-adaptive
+  /// behavior (Cupertino only on Apple platforms), pass a
+  /// [bottomNavigationBuilder] that checks `Theme.of(context).platform` instead.
+  final bool cupertino;
+
+  AdaptiveBottomNavigationBuilder? get _effectiveBottomNavigationBuilder {
+    if (bottomNavigationBuilder != null) return bottomNavigationBuilder;
+    if (cupertino) {
+      return (
+        BuildContext context,
+        List<NavigationDestination> destinations,
+        int selectedIndex,
+        ValueChanged<int> onDestinationSelected,
+      ) =>
+          AdaptiveScaffold.cupertinoTabBar(
+            destinations: destinations,
+            currentIndex: selectedIndex,
+            onTap: onDestinationSelected,
+          );
+    }
+    return null;
+  }
+
   void _goBranch(int index) {
     navigationShell.goBranch(
       index,
@@ -227,6 +261,7 @@ class AdaptiveNavigationShell extends StatelessWidget {
       internalAnimations: internalAnimations,
       navigationRailDestinationBuilder: navigationRailDestinationBuilder,
       groupAlignment: groupAlignment,
+      bottomNavigationBuilder: _effectiveBottomNavigationBuilder,
     );
   }
 }

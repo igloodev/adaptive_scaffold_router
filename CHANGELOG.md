@@ -1,3 +1,18 @@
+## 0.2.0
+
+Adds navigation customization, all backward-compatible (no breaking changes).
+
+* **Cupertino / platform-adaptive bottom bar.** New `bottomNavigationBuilder` on
+  `AdaptiveScaffold` (and `AdaptiveNavigationShell`) swaps the small-breakpoint
+  bar — plug in a `CupertinoTabBar` via the new `AdaptiveScaffold.cupertinoTabBar`
+  helper, or set `cupertino: true` on the shell.
+* **Badges.** Documented and tested: compose a Material `Badge` into a
+  destination's icon; it renders in both the bottom bar and the rail.
+* **Rail header / footer.** Documented `leadingExtendedNavRail` /
+  `leadingUnextendedNavRail` (header) and `trailingNavRail` (footer).
+* Example now showcases badges, a rail header/footer, and a platform-adaptive
+  bottom bar. New tests for all of the above (15 tests total).
+
 ## 0.1.0
 
 Initial release.
