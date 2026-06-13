@@ -1,0 +1,23 @@
+# Build artifacts (flutter test generates build/ when not in a git repo).
+build/
+*.iml
+.DS_Store
+
+# Package tests — consumers only need lib/.
+test/
+
+# The hero GIF is large; it is referenced from the README via a raw GitHub URL.
+# The static screenshots are kept — they back the pubspec `screenshots:` carousel.
+screenshots/demo.gif
+
+# Example: trim only the platform scaffolding and tests; keep lib/ + pubspec.yaml
+# so the example resolves and the pub.dev example tab works.
+example/android/
+example/ios/
+example/linux/
+example/macos/
+example/windows/
+example/web/
+example/test/
+example/pubspec.lock
+example/.metadata

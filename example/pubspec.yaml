@@ -1,0 +1,24 @@
+name: adaptive_scaffold_router_example
+description: "Demonstrates adaptive_scaffold_router with go_router and state preservation across breakpoints."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: ">=3.22.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  adaptive_scaffold_router:
+    path: ../
+  go_router: '>=10.0.0 <18.0.0'
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
