@@ -1,3 +1,24 @@
+## 0.3.0
+
+Completes the Material 3 adaptive navigation progression, backward-compatible
+(no breaking changes).
+
+* **Permanent navigation drawer on desktop.** New `permanentDrawer` flag on
+  `AdaptiveScaffold` (and `AdaptiveNavigationShell`) renders a persistent
+  `NavigationDrawer` as the primary navigation at the large and extra-large
+  breakpoints, instead of the extended rail — the widest tier of the Material 3
+  progression (`bottom bar → rail → drawer`). The medium and medium-large
+  breakpoints keep the rail.
+* **`AdaptiveScaffold.standardDrawer` helper.** Builds a width-bounded
+  `NavigationDrawer` from a list of `NavigationDestination`s, with optional
+  `leading`/`trailing` header and footer slots (neither affects the selected
+  index).
+* Branch state is still preserved across every breakpoint — resizing between the
+  rail and the drawer never rebuilds the body.
+* Example now enables `permanentDrawer: true`. New tests for the drawer helper,
+  the breakpoint switch, the shell pass-through and state preservation (24 tests
+  total).
+
 ## 0.2.0
 
 Adds navigation customization, all backward-compatible (no breaking changes).

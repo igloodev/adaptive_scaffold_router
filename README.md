@@ -48,7 +48,10 @@ one-line import change.
 ## Features
 
 - 📱 **Adaptive navigation** — bottom bar on phones, rail on tablets, extended
-  rail / drawer on desktop, with smooth animated transitions.
+  rail or a permanent drawer on desktop, with smooth animated transitions.
+- 🗄️ **Permanent desktop drawer** — opt in with `permanentDrawer: true` to
+  surface a persistent `NavigationDrawer` at large widths, the widest tier of
+  the Material 3 navigation progression.
 - 🧭 **`go_router` in a few lines** — `AdaptiveNavigationShell` connects
   `StatefulShellRoute.indexedStack` to the adaptive layout.
 - 🧠 **State preserved across resizes** — scroll position, form input and
@@ -162,6 +165,19 @@ AdaptiveNavigationShell(
   navigationShell: navigationShell,
   leadingExtendedNavRail: const Text('MAIL'),
   trailingNavRail: const Icon(Icons.logout),
+  destinations: destinations,
+)
+```
+
+**Permanent desktop drawer** — set `permanentDrawer: true` to render a persistent
+`NavigationDrawer` instead of the extended rail at the large and extra-large
+breakpoints. The rail still shows at medium/medium-large widths, and branch
+state is preserved when resizing between the two:
+
+```dart
+AdaptiveNavigationShell(
+  navigationShell: navigationShell,
+  permanentDrawer: true,
   destinations: destinations,
 )
 ```

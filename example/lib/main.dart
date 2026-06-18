@@ -41,6 +41,10 @@ final GoRouter _router = GoRouter(
       ) {
         return AdaptiveNavigationShell(
           navigationShell: navigationShell,
+          // On desktop-class widths, surface a permanent NavigationDrawer
+          // instead of the extended rail — the widest tier of the Material 3
+          // navigation progression (bottom bar → rail → drawer).
+          permanentDrawer: true,
           // A header (title) and footer, shown on the rail at tablet/desktop.
           leadingExtendedNavRail: const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),

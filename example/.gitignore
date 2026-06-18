@@ -32,6 +32,9 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+# This example ships inside a published library package, so its lockfile is
+# regenerated on pub get and only creates churn — don't track it.
+/pubspec.lock
 
 # Symbolication related
 app.*.symbols

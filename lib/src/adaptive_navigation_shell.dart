@@ -103,6 +103,7 @@ class AdaptiveNavigationShell extends StatelessWidget {
     this.onDestinationSelected,
     this.bottomNavigationBuilder,
     this.cupertino = false,
+    this.permanentDrawer = false,
   }) : assert(
           destinations.length >= 2,
           'At least two destinations are required',
@@ -203,6 +204,14 @@ class AdaptiveNavigationShell extends StatelessWidget {
   /// [bottomNavigationBuilder] that checks `Theme.of(context).platform` instead.
   final bool cupertino;
 
+  /// When true, the large and extra-large (desktop-class) breakpoints render a
+  /// permanent [NavigationDrawer] as the primary navigation instead of the
+  /// default extended [NavigationRail]. Mirrors [AdaptiveScaffold.permanentDrawer].
+  ///
+  /// Branch state is preserved across breakpoints regardless of this flag —
+  /// switching between the rail and the drawer never rebuilds the body.
+  final bool permanentDrawer;
+
   AdaptiveBottomNavigationBuilder? get _effectiveBottomNavigationBuilder {
     if (bottomNavigationBuilder != null) return bottomNavigationBuilder;
     if (cupertino) {
@@ -262,6 +271,7 @@ class AdaptiveNavigationShell extends StatelessWidget {
       navigationRailDestinationBuilder: navigationRailDestinationBuilder,
       groupAlignment: groupAlignment,
       bottomNavigationBuilder: _effectiveBottomNavigationBuilder,
+      permanentDrawer: permanentDrawer,
     );
   }
 }
