@@ -61,12 +61,30 @@ one-line import change.
   `Breakpoint`s are all exposed for full customization.
 - 🪟 Two-pane (list/detail) `body` + `secondaryBody`, foldable-aware.
 
+## How it works
+
+Resize the window and the navigation adapts automatically — no manual breakpoint
+checks needed:
+
+| Width | Breakpoint | Default navigation | With `permanentDrawer: true` |
+| --- | --- | --- | --- |
+| `< 600` | `small` | Bottom navigation bar | Bottom navigation bar |
+| `600–840` | `medium` | Navigation rail | Navigation rail |
+| `840–1200` | `mediumLarge` | Extended rail | Extended rail |
+| `1200–1600` | `large` | Extended rail | **Permanent drawer** |
+| `≥ 1600` | `extraLarge` | Extended rail | **Permanent drawer** |
+
+Every breakpoint is overridable, and switching tiers only swaps the navigation
+chrome — the body subtree, and all of its state, stays put. The default desktop
+navigation is the extended rail (matching `flutter_adaptive_scaffold`); opt into
+the permanent drawer with `permanentDrawer: true`.
+
 ## Screenshots
 
 | Phone | Tablet | Desktop |
 | :---: | :---: | :---: |
 | <img src="https://raw.githubusercontent.com/igloodev/adaptive_scaffold_router/master/screenshots/01_phone.png" width="220"> | <img src="https://raw.githubusercontent.com/igloodev/adaptive_scaffold_router/master/screenshots/02_tablet.png" width="240"> | <img src="https://raw.githubusercontent.com/igloodev/adaptive_scaffold_router/master/screenshots/03_desktop.png" width="240"> |
-| Bottom navigation bar | Navigation rail | Extended navigation rail |
+| Bottom navigation bar | Navigation rail | Permanent drawer (`permanentDrawer: true`) |
 
 ## Install
 

@@ -1,3 +1,13 @@
+## 0.3.1
+
+Documentation and screenshots, no code changes.
+
+* Add a **How it works** table to the README mapping each breakpoint to its
+  navigation, including the `permanentDrawer` override.
+* Regenerate the desktop screenshot with `permanentDrawer: true` so the v0.3.0
+  drawer is now shown (phone and tablet screenshots refreshed for consistency),
+  and update the screenshot caption and `pubspec` description to match.
+
 ## 0.3.0
 
 Completes the Material 3 adaptive navigation progression, backward-compatible
